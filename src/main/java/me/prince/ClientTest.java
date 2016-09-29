@@ -8,12 +8,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+
 public class ClientTest {
 
 	public static void main(String args[]) {
 		RestTemplate restTemplate = new RestTemplate();
-		String plainCreds = "EFORM:eform@1234";
-//		String plainCreds = "EFORM:password";
+		String plainCreds = "user:password";
 		
 		byte[] plainCredsBytes = plainCreds.getBytes();
 		byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
@@ -24,7 +25,9 @@ public class ClientTest {
 		headers.add("Authorization", "Basic " + base64Creds);
 		
 		HttpEntity<String> request = new HttpEntity<String>(headers);
-		ResponseEntity<Object> quote = restTemplate.exchange("http://portal-sit.mycimbsecurities.com/trportal2/rest/postalCode/416729", HttpMethod.GET, request, Object.class);
+		ResponseEntity<Object> quote = restTemplate.exchange("http://postalCode.com/rest/postalCode/416729", HttpMethod.GET, request, Object.class);
 		System.out.println(quote.getBody().toString());
+		Gson gson = new Gson();
+		System.out.println(gson.toJson(quote.getBody()));
 	}
 }
